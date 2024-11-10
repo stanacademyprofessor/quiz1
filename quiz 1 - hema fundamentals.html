@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz Game</title>
+</head>
+<body>
+    <h1>Interactive Quiz Game</h1>
+    <div id="quiz-container">
+        <div id="question-container"></div>
+        <div id="feedback" style="color: green; font-weight: bold;"></div>
+        <button id="next-button" onclick="loadNextQuestion()" style="display:none;">Next Question</button>
+    </div>
+    <div id="results"></div>
+
+    <script>
+        const quizQuestions = [
+            {question: "Whole blood consists of various components. Which of the following is not a part of whole blood?", options: ["Erythrocytes", "Leukocytes", "Interstitial fluid", "Platelets"], correctAnswer: 2},
+            {question: "After a blood sample undergoes coagulation, the remaining fluid is known as:", options: ["Plasma", "Serum", "Whole blood", "Buffy coat"], correctAnswer: 1},
+            {question: "The human body strives to maintain a state of equilibrium, ensuring stable physiological conditions. What term describes this fundamental principle?", options: ["Hematopoiesis", "Phagocytosis", "Homeostasis", "Coagulation"], correctAnswer: 2},
+            {question: "The concentration of solutes in a solution can impact the movement of water across cell membranes. If a cell is placed in a solution with a higher solute concentration, what is likely to happen to the cell?", options: ["It will swell.", "It will burst.", "It will remain unchanged.", "It will shrink."], correctAnswer: 3},
+            {question: "Blood pH is a crucial factor in maintaining normal bodily functions. What is the typical pH range for blood circulating in the veins?", options: ["Slightly acidic", "Slightly alkaline", "Neutral", "Highly acidic"], correctAnswer: 1},
+            {question: "Red blood cell indices help assess the characteristics of erythrocytes. Which index reflects the average volume of an individual red blood cell?", options: ["MCH", "MCHC", "MCV", "RDW"], correctAnswer: 2},
+            {question: "Certain medical conditions can affect the size of red blood cells. Which of the following conditions is likely to result in larger than normal red blood cells?", options: ["Iron deficiency anemia", "Thalassemia", "Megaloblastic anemia", "Lead poisoning"], correctAnswer: 2},
+            {question: "Hemoglobin is the protein responsible for oxygen transport in red blood cells. What does the MCH (mean corpuscular hemoglobin) index measure?", options: ["The concentration of hemoglobin in red blood cells", "The average weight of hemoglobin per red blood cell", "The variation in hemoglobin content among red blood cells", "The total amount of hemoglobin in the blood"], correctAnswer: 1},
+            {question: "The MCHC (mean corpuscular hemoglobin concentration) provides information about the color of red blood cells. What does a low MCHC indicate?", options: ["The red blood cells are abnormally large.", "The red blood cells have a pale color due to reduced hemoglobin content.", "The red blood cells are spherical in shape.", "The red blood cells have an increased volume."], correctAnswer: 1},
+            {question: "RDW (red blood cell distribution width) is a measure of the variability in red blood cell size. What does an elevated RDW suggest?", options: ["All red blood cells are uniformly sized.", "There is a wide range of red blood cell sizes in the sample.", "The red blood cells are smaller than normal.", "The red blood cells are larger than normal."], correctAnswer: 1},
+            {question: "Hematocrit (Hct) represents the proportion of red blood cells in a given volume of whole blood. If a patient's hematocrit is low, what does this generally indicate?", options: ["They have an excess of red blood cells.", "They have a deficiency of red blood cells.", "Their red blood cells are abnormally large.", "Their red blood cells are abnormally small."], correctAnswer: 1},
+            {question: "Hemoglobin levels are an important indicator of overall health. Which of the following is not a factor that can influence normal hemoglobin ranges?", options: ["Age", "Sex", "Blood type", "Altitude"], correctAnswer: 2},
+            {question: "Platelets play a critical role in blood clotting. What does the MPV (mean platelet volume) index measure?", options: ["The number of platelets in the blood", "The lifespan of platelets", "The average size of platelets", "The ability of platelets to aggregate"], correctAnswer: 2},
+            {question: "Blood cell counts can be expressed in relative or absolute terms. What is the key difference between these two types of counts?", options: ["Relative counts provide the exact number of cells, while absolute counts express the proportion of each cell type.", "Relative counts express the proportion of each cell type, while absolute counts provide the exact number of cells.", "Relative counts are used for white blood cells, while absolute counts are used for red blood cells.", "Relative counts are measured automatically, while absolute counts are determined manually."], correctAnswer: 1},
+            {question: "Staining techniques are essential for visualizing blood cells under a microscope. Which stain is routinely used for examining peripheral blood smears?", options: ["Prussian blue stain", "New methylene blue stain", "Wright's stain", "Neutral red stain"], correctAnswer: 2},
+            {question: "Specific stains highlight particular cellular components. What is the primary purpose of the Prussian blue stain in hematology?", options: ["To identify immature red blood cells", "To distinguish between different types of white blood cells", "To visualize iron deposits within cells", "To detect abnormal hemoglobin"], correctAnswer: 2},
+            {question: "Heinz bodies are inclusions within red blood cells that can indicate certain hemoglobin disorders. Which stain is used to visualize these inclusions?", options: ["Wright's stain", "Prussian blue stain", "Neutral red with brilliant cresyl green", "New methylene blue stain"], correctAnswer: 2}
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function loadQuestion() {
+            const questionContainer = document.getElementById("question-container");
+            const question = quizQuestions[currentQuestionIndex];
+            questionContainer.innerHTML = `
+                <h3>${currentQuestionIndex + 1}. ${question.question}</h3>
+                ${question.options.map((option, i) => `
+                    <label>
+                        <input type="radio" name="answer" value="${i}" onclick="checkAnswer(${i})">
+                        ${option}
+                    </label><br>
+                `).join('')}
+            `;
+            document.getElementById("feedback").innerText = "";
+            document.getElementById("next-button").style.display = "none";
+        }
+
+        function checkAnswer(selectedOption) {
+            const question = quizQuestions[currentQuestionIndex];
+            const feedback = document.getElementById("feedback");
+
+            if (selectedOption === question.correctAnswer) {
+                feedback.innerText = "Correct!";
+                document.getElementById("next-button").style.display = "block";
+            } else {
+                feedback.innerText = "Incorrect. Try again.";
+            }
+        }
+
+        function loadNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById("quiz-container").innerHTML = "<h2>Quiz Complete!</h2>";
+            }
+        }
+
+        // Load the first question when the page loads
+        loadQuestion();
+    </script>
+</body>
+</html>
+
+
